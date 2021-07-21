@@ -1,0 +1,193 @@
+{
+  "configuration": {
+    "title": "View by",
+    "description": "",
+  },
+  "internalFilters": {
+
+  },
+  "exposedFilters": {
+    // Come back to this..
+    "keyword": {
+      "enabled": true,
+      "label": "Search this years inductees by name",
+      "fields": [
+        "title"
+      ]
+    },
+    "filters": {
+      "enabled": true,
+      "columns": 2,
+      "displayHidden": false,
+      "submitOnChange": false,
+      "fields": [
+        {
+          "field": "field_profile_category_name",
+          "fieldType": "aggregation",
+          "label": "Category",
+          "placeholder": "Select a category",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_year",
+          "fieldType": "aggregation",
+          "label": "Induction year",
+          "placeholder": "Select a year",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_profile_expertise_name",
+          "fieldType": "aggregation",
+          "label": "Field of expertise",
+          "placeholder": "Select field of expertise",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_location_name",
+          "fieldType": "aggregation",
+          "label": "Location",
+          "placeholder": "Select a location",
+          "component": "select",
+          "additionalClasses": []
+        }
+      ]
+    }
+  },
+  "ordering": {
+    // To determine:
+    // - one or many
+    // - exposed options?
+    // - default
+    "sort": {
+      "enabled": false,
+      "promote": false,
+      "fields": [
+        { "field": "title", "direction": "asc" }
+      ]
+    }
+    // Way to define configurable items per page
+  },
+  "mapping": {
+    // Define the component you want to display the results.
+    "component": "vh-result-item",
+    // Define what prop on that component maps to what field in the ES results.
+    // { type: "icon, text, date, image, link, formatted", ...props }
+    "mapping": {
+      "icon": { "type": "icon", "symbol": "audio" },
+      "title": { "type": "text", "field": "field_title" },
+      "date": { "type": "date", "field": "field_start_date", "format": "DD MMM YYYY" },
+      "subTop": {
+        "type": "formatted",
+        "fields": [
+          { "type": "text", "field": "field_conviction_number" },
+          { "type": "date", "field": "field_date_of_conviction", "format": "DD MMM YYYY" }
+        ],
+        "format": "Conviction number: {field_conviction_number} | Date of conviction: {field_date_of_conviction}"
+      },
+      "summary": { "type": "text", "field": "field_summary" },
+      "subBottom": {
+        "type": "formatted",
+        "fields": [
+          { "type": "text", "field": "field_format" },
+          { "type": "text", "field": "field_duration" },
+          { "type": "text", "field": "field_size" }
+        ],
+        "format": "Format: {field_format} | Duration: {field_duration} | Size: {field_size}"
+      }
+    }
+  }
+}
+
+// =============================================================================
+
+  "automatedCards": {
+    "contentType": ["profile"],
+    "contentFilters": {
+      "field_profile_type": {
+        "operator": "AND",
+        "values": [
+          "womens_honor_role"
+        ]
+      }
+    },
+    "dateFilter": {
+      "enabled": true,
+      "criteria": "range",
+      "startDateField": "field_profile_womens_inducted_date",
+      "endDateField": "field_profile_womens_inducted_date",
+      "dateRangeStart": "2021-01-01T11:28:23+10:00",
+      "dateRangeEnd": "2022-01-01T11:28:23+10:00"
+    },
+    "sort": {
+      "enabled": true,
+      "promote": false,
+      "fields": [
+        {
+          "field": "title",
+          "direction": "asc"
+        }
+      ]
+    }
+  },
+  "individualCards": [],
+  "displayOptions": {
+    "displayType": "grid",
+    "itemsPerPage": 9
+  },
+  "userFilters": {
+    "keyword": {
+      "enabled": true,
+      "label": "Search this years inductees by name",
+      "fields": [
+        "title"
+      ]
+    },
+    "filters": {
+      "enabled": true,
+      "columns": 2,
+      "displayHidden": false,
+      "submitOnChange": false,
+      "fields": [
+        {
+          "field": "field_profile_category_name",
+          "fieldType": "aggregation",
+          "label": "Category",
+          "placeholder": "Select a category",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_year",
+          "fieldType": "aggregation",
+          "label": "Induction year",
+          "placeholder": "Select a year",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_profile_expertise_name",
+          "fieldType": "aggregation",
+          "label": "Field of expertise",
+          "placeholder": "Select field of expertise",
+          "component": "select",
+          "additionalClasses": []
+        },
+        {
+          "field": "field_location_name",
+          "fieldType": "aggregation",
+          "label": "Location",
+          "placeholder": "Select a location",
+          "component": "select",
+          "additionalClasses": []
+        }
+      ]
+    },
+    "sort": {
+      "enabled": false,
+      "fields": []
+    }
+  }
+}
