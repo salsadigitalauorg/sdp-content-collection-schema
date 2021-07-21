@@ -1,76 +1,114 @@
 {
-  "configuration": {
-    "title": "View by",
-    "description": "",
-  },
+  "title": "Search",
+  "description": "",
+  // Included the ability to set wording on search listing.
+  "resultsCountText": "Displaying {range} of {count} results",
+  "loadingText": "Loading",
+  "noResultsText": "Sorry! We couldn't find any matches",
+  "errorText": "Search isn't working right now, please try again later.",
   "internalFilters": {
-
+    // For displaying individual cards
+    "contentId": [],
+    // For displaying content by type
+    "contentType": ["profile"],
+    // For displaying content by various field values
+    "contentFilters": {
+      "field_topic": {
+        "operator": "AND",
+        "values": [
+          "Demo Topic"
+        ],
+      },
+      "field_tags": {
+        "operator": "AND",
+        "values": [
+          "Demo Tag"
+        ],
+      }
+    },
+    // For displaying content by date
+    "dateFilter": {
+      "criteria": "range",
+      "startDateField": "field_profile_womens_inducted_date",
+      "endDateField": "field_profile_womens_inducted_date",
+      "dateRangeStart": "2021-01-01T11:28:23+10:00",
+      "dateRangeEnd": "2022-01-01T11:28:23+10:00"
+    },
+    // When used like a "Related articles" list, we may want to exclude current page.
+    "excludeCurrentPage": true,
+    // OR
+    // Would having the option to include a raw ES DSL query be viable?
+    // This would be used instead of the above filters to provide more flexibiltiy
+    // for non-cms-managed lists.
+    "custom": {}
   },
   "exposedFilters": {
-    // Come back to this..
+    // Keyword filter
     "keyword": {
-      "enabled": true,
-      "label": "Search this years inductees by name",
-      "fields": [
-        "title"
-      ]
+      "label": "Searchh by keyword",
+      "placeholder": "Enter keyword(s)",
+      "fields": [ "title" ]
     },
+    // Advanced filters
     "filters": {
-      "enabled": true,
-      "columns": 2,
       "displayHidden": false,
       "submitOnChange": false,
       "fields": [
         {
-          "field": "field_profile_category_name",
+          // Populated from provided options
+          "field": "field_year",
+          "fieldType": "static",
+          "options": [ "1998", "1999", "2000" ],
+          "label": "Year",
+          "placeholder": "Select a year",
+          "component": "select",
+          "width": "50%",
+          "additionalClasses": []
+        },
+        {
+          // Populated from aggregated search results
+          "field": "field_category",
           "fieldType": "aggregation",
           "label": "Category",
           "placeholder": "Select a category",
           "component": "select",
+          "width": "50%",
           "additionalClasses": []
         },
-        {
-          "field": "field_year",
-          "fieldType": "aggregation",
-          "label": "Induction year",
-          "placeholder": "Select a year",
-          "component": "select",
-          "additionalClasses": []
-        },
-        {
-          "field": "field_profile_expertise_name",
-          "fieldType": "aggregation",
-          "label": "Field of expertise",
-          "placeholder": "Select field of expertise",
-          "component": "select",
-          "additionalClasses": []
-        },
-        {
-          "field": "field_location_name",
-          "fieldType": "aggregation",
-          "label": "Location",
-          "placeholder": "Select a location",
-          "component": "select",
-          "additionalClasses": []
-        }
       ]
     }
   },
-  "ordering": {
-    // To determine:
-    // - one or many
-    // - exposed options?
-    // - default
+  "permutations": {
+    // Sorting - Allows for default, or for exposed
     "sort": {
-      "enabled": false,
-      "promote": false,
-      "fields": [
+      "default": [
         { "field": "title", "direction": "asc" }
+      ],
+      "exposed": true,
+      "exposedOptions": [
+        { "label": "Relevance", "value": [ { "field": "title", "direction": "asc" } ], "default": true },
+        { "label": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
+        { "label": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
+        { "label": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },
+        { "label": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
+      ]
+    },
+    // Items Per Page - Allows for default, or for exposed
+    "itemsPerPage": {
+      "default": 9,
+      "exposed": true,
+      "exposedOptions": [
+        { "label": "10", "value": 10, "default": true },
+        { "label": "20", "value": 20 },
+        { "label": "50", "value": 50 },
+        { "label": "All", "value": 9999 }
       ]
     }
-    // Way to define configurable items per page
   },
-  "mapping": {
+  "displayOptions": {
+    "displayType": "grid"
+  },
+  "displayComponent": {
     // Define the component you want to display the results.
     "component": "vh-result-item",
     // Define what prop on that component maps to what field in the ES results.
@@ -97,97 +135,6 @@
         ],
         "format": "Format: {field_format} | Duration: {field_duration} | Size: {field_size}"
       }
-    }
-  }
-}
-
-// =============================================================================
-
-  "automatedCards": {
-    "contentType": ["profile"],
-    "contentFilters": {
-      "field_profile_type": {
-        "operator": "AND",
-        "values": [
-          "womens_honor_role"
-        ]
-      }
-    },
-    "dateFilter": {
-      "enabled": true,
-      "criteria": "range",
-      "startDateField": "field_profile_womens_inducted_date",
-      "endDateField": "field_profile_womens_inducted_date",
-      "dateRangeStart": "2021-01-01T11:28:23+10:00",
-      "dateRangeEnd": "2022-01-01T11:28:23+10:00"
-    },
-    "sort": {
-      "enabled": true,
-      "promote": false,
-      "fields": [
-        {
-          "field": "title",
-          "direction": "asc"
-        }
-      ]
-    }
-  },
-  "individualCards": [],
-  "displayOptions": {
-    "displayType": "grid",
-    "itemsPerPage": 9
-  },
-  "userFilters": {
-    "keyword": {
-      "enabled": true,
-      "label": "Search this years inductees by name",
-      "fields": [
-        "title"
-      ]
-    },
-    "filters": {
-      "enabled": true,
-      "columns": 2,
-      "displayHidden": false,
-      "submitOnChange": false,
-      "fields": [
-        {
-          "field": "field_profile_category_name",
-          "fieldType": "aggregation",
-          "label": "Category",
-          "placeholder": "Select a category",
-          "component": "select",
-          "additionalClasses": []
-        },
-        {
-          "field": "field_year",
-          "fieldType": "aggregation",
-          "label": "Induction year",
-          "placeholder": "Select a year",
-          "component": "select",
-          "additionalClasses": []
-        },
-        {
-          "field": "field_profile_expertise_name",
-          "fieldType": "aggregation",
-          "label": "Field of expertise",
-          "placeholder": "Select field of expertise",
-          "component": "select",
-          "additionalClasses": []
-        },
-        {
-          "field": "field_location_name",
-          "fieldType": "aggregation",
-          "label": "Location",
-          "placeholder": "Select a location",
-          "component": "select",
-          "additionalClasses": []
-        }
-      ]
-    },
-    "sort": {
-      "enabled": false,
-      "fields": []
     }
   }
 }
