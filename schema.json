@@ -7,23 +7,41 @@
   "noResultsText": "Sorry! We couldn't find any matches",
   "errorText": "Search isn't working right now, please try again later.",
   "internalFilters": {
+    // Alternative option - just have generic fields to handle filters. --------
+    "fields": [
+      {
+        "uuid": {
+          "operator": "OR",
+          "values": ["74194B73-0800-40C3-B110-C1F5A79D2B11"],
+        }
+      },
+      {
+        "type": {
+          "operator": "AND",
+          "values": ["profile"],
+        }
+      },
+      {
+        "field_tags": {
+          "operator": "AND",
+          "values": [5],
+        }
+      }
+    ],
+    // -------------------------------------------------------------------------
     // For displaying individual cards
-    "contentId": [],
+    "contentIds": [],
     // For displaying content by type
-    "contentType": ["profile"],
+    "contentTypes": ["profile"],
     // For displaying content by various field values
-    "contentFilters": {
+    "contentFields": {
       "field_topic": {
         "operator": "AND",
-        "values": [
-          "Demo Topic"
-        ],
+        "values": [1],
       },
       "field_tags": {
         "operator": "AND",
-        "values": [
-          "Demo Tag"
-        ],
+        "values": [5],
       }
     },
     // For displaying content by date
@@ -35,12 +53,35 @@
       "dateRangeEnd": "2022-01-01T11:28:23+10:00"
     },
     // When used like a "Related articles" list, we may want to exclude current page.
-    "excludeCurrentPage": true,
+    "includeCurrentPage": true,
+    "excludeIds": [],
     // OR
     // Would having the option to include a raw ES DSL query be viable?
     // This would be used instead of the above filters to provide more flexibiltiy
     // for non-cms-managed lists.
-    "custom": {}
+    "custom": {
+      // Standard ES query
+      "bool": {
+        "must": {
+          "match_all": {}
+        },
+        "filter": [{
+          "range": {
+            "field_event_date_end_value": {
+              "gte": "2020-01-30T13:00:00.000Z"
+            }
+          }
+        }, {
+          "terms": {
+            "type": ["event"]
+          }
+        }, {
+          "terms": {
+            "field_node_site": ["4"]
+          }
+        }]
+      }
+    }
   },
   "exposedFilters": {
     // Keyword filter
@@ -86,7 +127,7 @@
       ],
       "exposed": true,
       "exposedOptions": [
-        { "label": "Relevance", "value": [ { "field": "title", "direction": "asc" } ], "default": true },
+        { "label": "Relevance", "value": null, "default": true },
         { "label": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
         { "label": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
         { "label": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },

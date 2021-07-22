@@ -1,0 +1,246 @@
+{
+  "type": "object",
+  "description": "Schema for listing component options",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title displayed above results"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description text displayed above results"
+    },
+    "automatedCards": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "landing_page",
+              "event",
+              "news",
+              "profile"
+            ]
+          }
+        },
+        "contentFilters": {
+          "type": "object",
+          "additionalProperties": {
+            "operator": {
+              "type": "string",
+              "enum": [
+                "AND",
+                "OR"
+              ]
+            },
+            "values": {
+              "type": "array"
+            }
+          }
+        },
+        "dateFilter": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "criteria": {
+              "type": "string",
+              "description": "presets for date math operators, potentially could be extended to support common requests eg: next week, month, etc",
+              "enum": [
+                "upcoming",
+                "past",
+                "range"
+              ]
+            },
+            "startDateField": {
+              "type": "string"
+            },
+            "endDateField": {
+              "type": "string"
+            },
+            "dateRangeStart": {
+              "type": "string",
+              "description": "ISO formatted string - supports date math https://www.elastic.co/guide/en/elasticsearch/reference/7.8/common-options.html#date-math"
+            },
+            "dateRangeEnd": {
+              "type": "string",
+              "description": "ISO formatted string - supports date math https://www.elastic.co/guide/en/elasticsearch/reference/7.8/common-options.html#date-math"
+            }
+          }
+        },
+        "sort": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable sorting of intitial results, note if sorting is enabled in the front end this will be overridden by the user choice"
+            },
+            "promote": {
+              "type": "boolean",
+              "description": "Boost sticky items"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "example": "changed"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": [
+                      "desc",
+                      "asc"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "individualCards": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "example": "[1, 2]",
+        "description": "Node IDs of cards"
+      }
+    },
+    "displayOptions": {
+      "type": "object",
+      "properties": {
+        "displayType": {
+          "type": "string",
+          "enum": [
+            "result",
+            "grid",
+            "carousel",
+            "table"
+          ]
+        },
+        "itemsPerPage": {
+          "type": "number"
+        },
+        "viewOptions": {
+          "type": "object",
+          "description": "options for front end display for displayType"
+        }
+      }
+    },
+    "userFilters": {
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "label": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "filters": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "displayHidden": {
+              "type": "boolean",
+              "description": "hide filters on load"
+            },
+            "submitOnChange": {
+              "type": "boolean",
+              "description": "whether changing filter value submits search form"
+            },
+            "columns": {
+              "type": "number",
+              "description": "Number of columns to display form filters"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "component": {
+                    "type": "string",
+                    "description": "Optional: the ripple component can be inferred from the fieldType but there may be exceptions, such as A-Z for text field"
+                  },
+                  "fieldType": {
+                    "type": "string",
+                    "enum": [
+                      "aggregation",
+                      "text",
+                      "date"
+                    ]
+                  },
+                  "placeholder": {
+                    "type": "string"
+                  },
+                  "additionalClasses": {
+                    "type": "array",
+                    "example": [
+                      "rpl-select--large",
+                      "rpl-select--wide"
+                    ],
+                    "description": "Allows additional styling of form elements if needed, space seperated list  of classes"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sort": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable sorting in the front end"
+            },
+            "fields": {
+              "type": "array",
+              "description": "fields to sort on",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "example": "changed"
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": [
+                      "desc",
+                      "asc"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
