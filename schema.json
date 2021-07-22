@@ -7,28 +7,9 @@
   "noResultsText": "Sorry! We couldn't find any matches",
   "errorText": "Search isn't working right now, please try again later.",
   "internalFilters": {
-    // Alternative option - just have generic fields to handle filters. --------
-    "fields": [
-      {
-        "uuid": {
-          "operator": "OR",
-          "values": ["74194B73-0800-40C3-B110-C1F5A79D2B11"],
-        }
-      },
-      {
-        "type": {
-          "operator": "AND",
-          "values": ["profile"],
-        }
-      },
-      {
-        "field_tags": {
-          "operator": "AND",
-          "values": [5],
-        }
-      }
-    ],
     // -------------------------------------------------------------------------
+    // Option A - Provide some simplified ways to define rules. These get converted
+    // into an es DSL query.
     // For displaying individual cards
     "contentIds": [],
     // For displaying content by type
@@ -44,6 +25,9 @@
         "values": [5],
       }
     },
+    // When used like a "Related articles" list, we may want to exclude current page.
+    "includeCurrentPage": true,
+    "excludeIds": [],
     // For displaying content by date
     "dateFilter": {
       "criteria": "range",
@@ -52,36 +36,55 @@
       "dateRangeStart": "2021-01-01T11:28:23+10:00",
       "dateRangeEnd": "2022-01-01T11:28:23+10:00"
     },
-    // When used like a "Related articles" list, we may want to exclude current page.
-    "includeCurrentPage": true,
-    "excludeIds": [],
-    // OR
-    // Would having the option to include a raw ES DSL query be viable?
+    // -------------------------------------------------------------------------
+    // Option B - A single generic way to define fields - this is a bit more flexible
+    "fields": [
+      {
+        // For displaying individual cards
+        "uuid": { "operator": "OR", "values": ["74194B73-0800-40C3-B110-C1F5A79D2B11"] }
+      },
+      {
+        // For displaying content by type
+        "type": { "operator": "AND", "values": ["profile"] }
+      },
+      {
+        // For displaying tags (and other filters)
+        "field_tags": { "operator": "AND", "values": [5] }
+      },
+      {
+        // An example of grouping by operator
+        "operator": "AND",
+        "fields": [
+          {
+            "field_date": { "operator": "OR", "values": [9, 15, 20] }
+          }
+        ]
+      }
+    ],
+    // -------------------------------------------------------------------------
+    // Option C - Pure es DSL Query - most flexbile.
+    // Would this option be be viable?
     // This would be used instead of the above filters to provide more flexibiltiy
     // for non-cms-managed lists.
     "custom": {
-      // Standard ES query
       "bool": {
         "must": {
           "match_all": {}
         },
-        "filter": [{
-          "range": {
-            "field_event_date_end_value": {
-              "gte": "2020-01-30T13:00:00.000Z"
-            }
+        "filter": [
+          {
+            "range": { "field_event_date_end_value": { "gte": "2020-01-30T13:00:00.000Z" }  }
+          },
+          {
+            "terms": { "type": ["event"] }
+          },
+          {
+            "terms": { "field_node_site": ["4"] }
           }
-        }, {
-          "terms": {
-            "type": ["event"]
-          }
-        }, {
-          "terms": {
-            "field_node_site": ["4"]
-          }
-        }]
+        ]
       }
     }
+    // -------------------------------------------------------------------------
   },
   "exposedFilters": {
     // Keyword filter
@@ -92,6 +95,7 @@
     },
     // Advanced filters
     "filters": {
+      // What should "displayHidden" do?
       "displayHidden": false,
       "submitOnChange": false,
       "fields": [
@@ -99,7 +103,7 @@
           // Populated from provided options
           "field": "field_year",
           "fieldType": "static",
-          "options": [ "1998", "1999", "2000" ],
+          "options": ["1998", "1999", "2000"],
           "label": "Year",
           "placeholder": "Select a year",
           "component": "select",
@@ -127,11 +131,11 @@
       ],
       "exposed": true,
       "exposedOptions": [
-        { "label": "Relevance", "value": null, "default": true },
-        { "label": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
-        { "label": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
-        { "label": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },
-        { "label": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
+        { "name": "Relevance", "value": null, "default": true },
+        { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
+        { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
+        { "name": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },
+        { "name": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
       ]
     },
     // Items Per Page - Allows for default, or for exposed
@@ -139,10 +143,10 @@
       "default": 9,
       "exposed": true,
       "exposedOptions": [
-        { "label": "10", "value": 10, "default": true },
-        { "label": "20", "value": 20 },
-        { "label": "50", "value": 50 },
-        { "label": "All", "value": 9999 }
+        { "name": "10", "value": 10, "default": true },
+        { "name": "20", "value": 20 },
+        { "name": "50", "value": 50 },
+        { "name": "All", "value": 9999 }
       ]
     }
   },
