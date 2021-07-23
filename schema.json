@@ -91,7 +91,7 @@
     "keyword": {
       "label": "Searchh by keyword",
       "placeholder": "Enter keyword(s)",
-      "fields": [ "title" ]
+      "fields": [ "title", "body", "summary_processed" ]
     },
     // Advanced filters
     "filters": {
@@ -157,7 +157,7 @@
     // Define the component you want to display the results.
     "component": "vh-result-item",
     // Define what prop on that component maps to what field in the ES results.
-    // { type: "icon, text, date, image, link, formatted", ...props }
+    // { type: "icon, text, date, image, link, formatted, conditional", ...props }
     "mapping": {
       "icon": { "type": "icon", "symbol": "audio" },
       "title": { "type": "text", "field": "field_title" },
@@ -171,6 +171,24 @@
         "format": "Conviction number: {field_conviction_number} | Date of conviction: {field_date_of_conviction}"
       },
       "summary": { "type": "text", "field": "field_summary" },
+      // -------------------------------------------------------------------------
+      // Summary - in some cases - depending on the content, we may want to use a different field for a different type.
+      "summary": {
+        "type": "conditional",
+        "field": "type",
+        "cases": [
+          {
+            "case": "landing_page",
+            "value": { "type": "text", "field": "field_landing_page_summary" }
+          },
+          {
+            "case": "news",
+            "value": { "type": "text", "field": "summary_processed" }
+          }
+        ],
+        "default": { "type": "text", "field": "field_summary" }
+      },
+      // -------------------------------------------------------------------------
       "subBottom": {
         "type": "formatted",
         "fields": [
