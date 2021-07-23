@@ -1,11 +1,10 @@
 {
   "title": "Search",
   "description": "",
-  // Included the ability to set wording on search listing.
-  "resultsCountText": "Displaying {range} of {count} results",
-  "loadingText": "Loading",
-  "noResultsText": "Sorry! We couldn't find any matches",
-  "errorText": "Search isn't working right now, please try again later.",
+  "callToAction": {
+    "text": "View all",
+    "url": "/search"
+  },
   "internalFilters": {
     // -------------------------------------------------------------------------
     // Option A - Provide some simplified ways to define rules. These get converted
@@ -98,11 +97,21 @@
       // What should "displayHidden" do?
       "displayHidden": false,
       "submitOnChange": false,
+      "label": "Refine search",
+      "submit": {
+        "visible": true,
+        "label": "Apply change"
+      },
+      "clearForm": {
+        "visible": true,
+        "label": "Clear search filters"
+      },
       "fields": [
         {
           // Populated from provided options
           "field": "field_year",
-          "fieldType": "static",
+          // We need a list of field types (e.g. aggregation, static (or manual), date?)
+          "fieldType": "static", // TODO - What name should be used?
           "options": ["1998", "1999", "2000"],
           "label": "Year",
           "placeholder": "Select a year",
@@ -120,6 +129,8 @@
           "width": "50%",
           "additionalClasses": []
         },
+        // Populated from taxonomy?
+        // Populated from date range?
       ]
     }
   },
@@ -151,7 +162,13 @@
     }
   },
   "displayOptions": {
-    "displayType": "grid"
+    // May support grid / table / list?
+    "displayType": "grid",
+    // Ability to tweak wording in search results
+    "resultsCountText": "Displaying {range} of {count} results",
+    "loadingText": "Loading",
+    "noResultsText": "Sorry! We couldn't find any matches",
+    "errorText": "Search isn't working right now, please try again later."
   },
   "displayComponent": {
     // Define the component you want to display the results.
