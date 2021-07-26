@@ -6,6 +6,7 @@
     "url": "/search"
   },
   "internalFilters": {
+    // NOTE: Dylan's pref is Option A + C
     // -------------------------------------------------------------------------
     // Option A - Provide some simplified ways to define rules. These get converted
     // into an es DSL query.
@@ -16,6 +17,7 @@
     // For displaying content by various field values
     "contentFields": {
       "field_topic": {
+        "isNot": true,
         "operator": "AND",
         "values": [1],
       },
@@ -25,11 +27,12 @@
       }
     },
     // When used like a "Related articles" list, we may want to exclude current page.
-    "includeCurrentPage": true,
-    "excludeIds": [],
+    "includeCurrentPage": false,
+    "excludeIds": [], // what about fields / types etc?
     // For displaying content by date
     "dateFilter": {
-      "criteria": "range",
+      // Things to support: Year ranges, next 2 weeks, new thing this week, whats new
+      "criteria": "range", // range / all / upcoming / from_current / past
       "startDateField": "field_profile_womens_inducted_date",
       "endDateField": "field_profile_womens_inducted_date",
       "dateRangeStart": "2021-01-01T11:28:23+10:00",
@@ -58,6 +61,9 @@
             "field_date": { "operator": "OR", "values": [9, 15, 20] }
           }
         ]
+      },
+      {
+        // Option to insert ESDSL?
       }
     ],
     // -------------------------------------------------------------------------
@@ -83,6 +89,8 @@
         ]
       }
     }
+    // Search templates - might be an alternative to providing ES DSL directly.
+    // Need a way to interact with exposedfilters - how do they get added to a custom query? Might need conventions to write custom queries.
     // -------------------------------------------------------------------------
   },
   "exposedFilters": {
@@ -135,6 +143,7 @@
     }
   },
   "permutations": {
+    // TODO - We still need to decide where this lives?
     // Sorting - Allows for default, or for exposed
     "sort": {
       "default": [
@@ -218,3 +227,6 @@
     }
   }
 }
+
+// Default - constant (filters + sort + itemsPerPage)
+// Override - 
