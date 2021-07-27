@@ -1,3 +1,7 @@
+/**
+ * Content Collection Schema
+ * Version: Draft
+ */
 {
   "title": "Search",
   "description": "",
@@ -76,13 +80,13 @@
       "defaultStyling": true, // Default: 1 field = 100%, 2 fields = 50%, 3 = 33.33% (desktop)
       "fields": [
         {
-          "type": "custom-date" // A custom implementation
+          "type": "custom-date" // Example custom implementation. Uses a custom hook to populate.
         },
         {
           "type": "basic",
           "component": "rpl-select",
           "options": {
-            // Ability to set vue-form-generator settings direectly.
+            // Ability to set vue-form-generator field settings directly.
             // If select and no existing values are set, assume aggregation
           },
           "additionalClasses": [ "rpl-col-2" ],
@@ -131,7 +135,7 @@
         "options": {
           // Options passed to the individual result display
         }
-        // mapping is handled in "middleware" (in code, not in schema)
+        // Mapping uses a custom "hook" to implement mapping.
       }
     }
   }
