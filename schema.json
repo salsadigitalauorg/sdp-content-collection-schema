@@ -5,26 +5,17 @@
     "text": "View all",
     "url": "/search"
   },
-  "internalFilters": {
-    // NOTE: Dylan's pref is Option A + C
+  "internal": {
     // -------------------------------------------------------------------------
-    // Option A - Provide some simplified ways to define rules. These get converted
-    // into an es DSL query.
+    // Simple - These get converted into an Elasticsearch DSL query.
     // For displaying individual cards
     "contentIds": [],
     // For displaying content by type
     "contentTypes": ["profile"],
     // For displaying content by various field values
     "contentFields": {
-      "field_topic": {
-        "isNot": true,
-        "operator": "AND",
-        "values": [1],
-      },
-      "field_tags": {
-        "operator": "AND",
-        "values": [5],
-      }
+      "field_topic": { "operator": "AND", "values": [1] },
+      "field_tags": { "operator": "AND", "values": [5] }
     },
     // When used like a "Related articles" list, we may want to exclude current page.
     "includeCurrentPage": false,
@@ -32,45 +23,15 @@
     // For displaying content by date
     "dateFilter": {
       // Things to support: Year ranges, next 2 weeks, new thing this week, whats new
-      "criteria": "range", // range / all / upcoming / from_current / past
+      "criteria": "range", // "range" / "all" / "upcoming" / "from_current" / "past"
       "startDateField": "field_profile_womens_inducted_date",
       "endDateField": "field_profile_womens_inducted_date",
       "dateRangeStart": "2021-01-01T11:28:23+10:00",
       "dateRangeEnd": "2022-01-01T11:28:23+10:00"
     },
     // -------------------------------------------------------------------------
-    // Option B - A single generic way to define fields - this is a bit more flexible
-    "fields": [
-      {
-        // For displaying individual cards
-        "uuid": { "operator": "OR", "values": ["74194B73-0800-40C3-B110-C1F5A79D2B11"] }
-      },
-      {
-        // For displaying content by type
-        "type": { "operator": "AND", "values": ["profile"] }
-      },
-      {
-        // For displaying tags (and other filters)
-        "field_tags": { "operator": "AND", "values": [5] }
-      },
-      {
-        // An example of grouping by operator
-        "operator": "AND",
-        "fields": [
-          {
-            "field_date": { "operator": "OR", "values": [9, 15, 20] }
-          }
-        ]
-      },
-      {
-        // Option to insert ESDSL?
-      }
-    ],
-    // -------------------------------------------------------------------------
-    // Option C - Pure es DSL Query - most flexbile.
-    // Would this option be be viable?
-    // This would be used instead of the above filters to provide more flexibiltiy
-    // for non-cms-managed lists.
+    // Complex - Pure Elasticsearch DSL Query
+    // POST to /search-api - Build functionality in search-api to accept POSTs
     "custom": {
       "bool": {
         "must": {
@@ -78,7 +39,7 @@
         },
         "filter": [
           {
-            "range": { "field_event_date_end_value": { "gte": "2020-01-30T13:00:00.000Z" }  }
+            "range": { "field_event_date_end_value": { "gte": "2020-01-30T13:00:00.000Z" } }
           },
           {
             "terms": { "type": ["event"] }
@@ -89,21 +50,19 @@
         ]
       }
     }
-    // Search templates - might be an alternative to providing ES DSL directly.
-    // Need a way to interact with exposedfilters - how do they get added to a custom query? Might need conventions to write custom queries.
-    // -------------------------------------------------------------------------
   },
-  "exposedFilters": {
+  "interface": {
     // Keyword filter
     "keyword": {
-      "label": "Searchh by keyword",
+      // https://www.elastic.co/guide/en/elasticsearch/reference/7.8/query-dsl-simple-query-string-query.html
+      "type": "basic", // "basic" = use phrase match, "custom-complex" = a custom implementation (e.g. legislation)
+      "label": "Search by keyword",
       "placeholder": "Enter keyword(s)",
       "fields": [ "title", "body", "summary_processed" ]
     },
     // Advanced filters
     "filters": {
-      // What should "displayHidden" do?
-      "displayHidden": false,
+      "displayHidden": false, // show or hide advanced fields
       "submitOnChange": false,
       "label": "Refine search",
       "submit": {
@@ -111,122 +70,69 @@
         "label": "Apply change"
       },
       "clearForm": {
-        "visible": true,
+        "visible": true, // or "on-dirty"
         "label": "Clear search filters"
       },
+      "defaultStyling": true, // Default: 1 field = 100%, 2 fields = 50%, 3 = 33.33% (desktop)
       "fields": [
         {
-          // Populated from provided options
-          "field": "field_year",
-          // We need a list of field types (e.g. aggregation, static (or manual), date?)
-          "fieldType": "static", // TODO - What name should be used?
-          "options": ["1998", "1999", "2000"],
-          "label": "Year",
-          "placeholder": "Select a year",
-          "component": "select",
-          "width": "50%",
-          "additionalClasses": []
+          "type": "custom-date" // A custom implementation
         },
         {
-          // Populated from aggregated search results
-          "field": "field_category",
-          "fieldType": "aggregation",
-          "label": "Category",
-          "placeholder": "Select a category",
-          "component": "select",
-          "width": "50%",
-          "additionalClasses": []
-        },
-        // Populated from taxonomy?
-        // Populated from date range?
-      ]
-    }
-  },
-  "permutations": {
-    // TODO - We still need to decide where this lives?
-    // Sorting - Allows for default, or for exposed
-    "sort": {
-      "default": [
-        { "field": "title", "direction": "asc" }
-      ],
-      "exposed": true,
-      "exposedOptions": [
-        { "name": "Relevance", "value": null, "default": true },
-        { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
-        { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
-        { "name": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },
-        { "name": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
+          "type": "basic",
+          "component": "rpl-select",
+          "options": {
+            // Ability to set vue-form-generator settings direectly.
+            // If select and no existing values are set, assume aggregation
+          },
+          "additionalClasses": [ "rpl-col-2" ],
+          "elasticsearch-field": "field_year",
+          "elasticsearch-aggregation": true, // this will populate the component options
+        }
       ]
     },
-    // Items Per Page - Allows for default, or for exposed
-    "itemsPerPage": {
-      "default": 9,
-      "exposed": true,
-      "exposedOptions": [
-        { "name": "10", "value": 10, "default": true },
-        { "name": "20", "value": 20 },
-        { "name": "50", "value": 50 },
-        { "name": "All", "value": 9999 }
-      ]
-    }
-  },
-  "displayOptions": {
-    // May support grid / table / list?
-    "displayType": "grid",
-    // Ability to tweak wording in search results
-    "resultsCountText": "Displaying {range} of {count} results",
-    "loadingText": "Loading",
-    "noResultsText": "Sorry! We couldn't find any matches",
-    "errorText": "Search isn't working right now, please try again later."
-  },
-  "displayComponent": {
-    // Define the component you want to display the results.
-    "component": "vh-result-item",
-    // Define what prop on that component maps to what field in the ES results.
-    // { type: "icon, text, date, image, link, formatted, conditional", ...props }
-    "mapping": {
-      "icon": { "type": "icon", "symbol": "audio" },
-      "title": { "type": "text", "field": "field_title" },
-      "date": { "type": "date", "field": "field_start_date", "format": "DD MMM YYYY" },
-      "subTop": {
-        "type": "formatted",
-        "fields": [
-          { "type": "text", "field": "field_conviction_number" },
-          { "type": "date", "field": "field_date_of_conviction", "format": "DD MMM YYYY" }
-        ],
-        "format": "Conviction number: {field_conviction_number} | Date of conviction: {field_date_of_conviction}"
-      },
-      "summary": { "type": "text", "field": "field_summary" },
-      // -------------------------------------------------------------------------
-      // Summary - in some cases - depending on the content, we may want to use a different field for a different type.
-      "summary": {
-        "type": "conditional",
-        "field": "type",
-        "cases": [
-          {
-            "case": "landing_page",
-            "value": { "type": "text", "field": "field_landing_page_summary" }
-          },
-          {
-            "case": "news",
-            "value": { "type": "text", "field": "summary_processed" }
+    // Display of results
+    "display": {
+      "type": "grid", // extensible -> allow for more
+      "options": {
+        // Options passed to the display component
+        "resultsCountText": "Displaying {range} of {count} results",
+        "loadingText": "Loading",
+        "noResultsText": "Sorry! We couldn't find any matches",
+        "errorText": "Search isn't working right now, please try again later.",
+        "sort": {
+          "default": null, // This value must match the first option value.
+          "options": [ // If defined - will show external field to set value.
+            { "name": "Relevance", "value": null },
+            { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
+            { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
+            { "name": "Newest", "value": [ { "field": "field_date", "direction": "asc" } ] },
+            { "name": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
+          ]
+        },
+        "itemsPerPage": {
+          "default": 12,
+          "options": [ // If defined - will show external field to set value.
+            { "name": "10", "value": 10, "default": true },
+            { "name": "20", "value": 20 },
+            { "name": "50", "value": 50 },
+            { "name": "All", "value": 9999 }
+          ]
+        },
+        "pagination": {
+          "type": "list", // Future examples: "load-more" / "infinite-scroll"
+          "options": {
+            // Options passed to the pagination component
           }
-        ],
-        "default": { "type": "text", "field": "field_summary" }
+        }
       },
-      // -------------------------------------------------------------------------
-      "subBottom": {
-        "type": "formatted",
-        "fields": [
-          { "type": "text", "field": "field_format" },
-          { "type": "text", "field": "field_duration" },
-          { "type": "text", "field": "field_size" }
-        ],
-        "format": "Format: {field_format} | Duration: {field_duration} | Size: {field_size}"
+      "resultComponent": {
+        "type": "basic-card",
+        "options": {
+          // Options passed to the individual result display
+        }
+        // mapping is handled in "middleware" (in code, not in schema)
       }
     }
   }
 }
-
-// Default - constant (filters + sort + itemsPerPage)
-// Override - 
