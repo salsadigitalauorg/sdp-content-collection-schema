@@ -9,10 +9,18 @@
     "text": "View all",
     "url": "/search"
   },
+  /**
+   * "Internal" contains the rules for generating the search query.
+   * These rules are set by default and, with the exception of
+   * sort and itemsToLoad, are unable to be changed via an exposed user form.
+   */
   "internal": {
-    // -------------------------------------------------------------------------
-    // Simple - These get converted into an Elasticsearch DSL query.
-    // For displaying individual cards
+    /**
+     * -------------------------------------------------------------------------
+     * Simple - These properties are converted into an Elasticsearch DSL query.
+     * -------------------------------------------------------------------------
+     */
+    // For displaying user defined content - @todo are they uuid or nids?
     "contentIds": [],
     // For displaying content by type
     "contentTypes": ["profile"],
@@ -33,8 +41,15 @@
       "dateRangeStart": "2021-01-01T11:28:23+10:00",
       "dateRangeEnd": "2022-01-01T11:28:23+10:00"
     },
-    // -------------------------------------------------------------------------
-    // Complex - Pure Elasticsearch DSL Query
+    // Sort - will be overridden by the first option in `interface.display.sort` if available.
+    "sort": { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
+    // itemsToLoad - will be overridden by the first option in `interface.display.pagination` if available.
+    "itemsToLoad": 10,
+    /**
+     * -------------------------------------------------------------------------
+     * Complex - Pure Elasticsearch DSL Query
+     * -------------------------------------------------------------------------
+     */
     // POST to /search-api - Build functionality in search-api to accept POSTs
     "custom": {
       "bool": {
@@ -55,11 +70,17 @@
       }
     }
   },
+  /**
+   * "Interface" contains rules for displaying the results, and displaying
+   * the exposed user form for changing the search query.
+   * Where "type" is used, nuxt-tide will allow for defining custom
+   * functions to extend the existing functionality.
+   */
   "interface": {
     // Keyword filter
     "keyword": {
       // https://www.elastic.co/guide/en/elasticsearch/reference/7.8/query-dsl-simple-query-string-query.html
-      "type": "basic", // "basic" = use phrase match, "custom-complex" = a custom implementation (e.g. legislation)
+      "type": "basic", // "basic" = use phrase match, "custom-xyz" = a custom implementation (e.g. legislation)
       "label": "Search by keyword",
       "placeholder": "Enter keyword(s)",
       "fields": [ "title", "body", "summary_processed" ]
@@ -105,8 +126,7 @@
         "noResultsText": "Sorry! We couldn't find any matches",
         "errorText": "Search isn't working right now, please try again later.",
         "sort": {
-          "default": null, // This value must match the first option value.
-          "options": [ // If defined - will show external field to set value.
+          "userExposedOptions": [
             { "name": "Relevance", "value": null },
             { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
             { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
@@ -114,28 +134,19 @@
             { "name": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
           ]
         },
-        "itemsPerPage": {
-          "default": 12,
-          "options": [ // If defined - will show external field to set value.
-            { "name": "10", "value": 10, "default": true },
+        "pagination": {
+          "type": "list", // Future examples: "load-more" / "infinite-scroll"
+          "userExposedOptions": [
+            { "name": "10", "value": 10 },
             { "name": "20", "value": 20 },
             { "name": "50", "value": 50 },
             { "name": "All", "value": 9999 }
           ]
-        },
-        "pagination": {
-          "type": "list", // Future examples: "load-more" / "infinite-scroll"
-          "options": {
-            // Options passed to the pagination component
-          }
         }
       },
       "resultComponent": {
-        "type": "basic-card",
-        "options": {
-          // Options passed to the individual result display
-        }
-        // Mapping uses a custom "hook" to implement mapping.
+        // Object passed to a custom "hook" to implement mapping.
+        "type": "basic-card"
       }
     }
   }
