@@ -1,18 +1,39 @@
 /**
+ * -----------------------------------------------------------------------------
  * Content Collection Schema
  * Version: Draft
+ *
+ * Tags:
+ * @todo       - Need discussion.
+ * @drupal     - Possible implementation for the Drupal Content Collection form.
+ * @drupal-src - The data source to populate the form field.
+ * -----------------------------------------------------------------------------
  */
-{
+const schema = {
+  /**
+   * Title
+   * @drupal [Field] Text input
+   */
   "title": "Search",
+  /**
+   * Description
+   * @drupal [Field] Text area input
+   */
   "description": "",
+  /**
+   * Call to Action
+   * @drupal [Field] Link field with `text` and `url` fields.
+   */
   "callToAction": {
     "text": "View all",
     "url": "/search"
   },
   /**
+   * ---------------------------------------------------------------------------
    * "Internal" contains the rules for generating the search query.
    * These rules are set by default and, with the exception of
    * sort and itemsToLoad, are unable to be changed via an exposed user form.
+   * ---------------------------------------------------------------------------
    */
   "internal": {
     /**
@@ -20,37 +41,122 @@
      * Simple - These properties are converted into an Elasticsearch DSL query.
      * -------------------------------------------------------------------------
      */
-    // For displaying user defined content - @todo are they uuid or nids?
+    /**
+     * Content Ids
+     * For displaying user defined content
+     * @todo Do we use uuid or nids?
+     * @drupal [Field] Multiple entity references
+     * @drupal-src Any nodes
+     */
     "contentIds": [],
-    // For displaying content by type
+    /**
+     * Content Types
+     * For displaying content by type
+     * @drupal [Field] Single option select
+     * @drupal-src Available content types
+     */
     "contentTypes": ["profile"],
-    // For displaying content by various field values
+    /**
+     * Content Fields
+     * For filtering content by various field values
+     * @drupal This field only supports 2 hard-coded options: Topics, Tags
+     */
     "contentFields": {
+      /**
+       * Filter: Topics
+       * @drupal Hard-coded option
+       * @drupal [Field] "Operator" - "AND" or "OR"
+       * @drupal [Field] "Values" - Select multiple topic values
+       */
       "field_topic": { "operator": "AND", "values": [1] },
+      /**
+       * Filter: Tags
+       * @drupal Hard-coded option
+       * @drupal [Field] "Operator" - "AND" or "OR"
+       * @drupal [Field] "Values" - Select multiple tag values
+       */
       "field_tags": { "operator": "AND", "values": [5] }
     },
-    // When used like a "Related articles" list, we may want to exclude current page.
+    /**
+     * Include Current Page
+     * When used like a "Related articles" list, we may want to exclude current page.
+     * @drupal Not available
+     */
     "includeCurrentPage": false,
-    "excludeIds": [], // what about fields / types etc?
-    // For displaying content by date
+    /**
+     * Exclude Ids
+     * Option to exclude ids from results
+     * @drupal Not available
+     * @todo May need more work
+     */
+    "excludeIds": [],
+    /**
+     * Date filter
+     * For filtering content by date
+     * @drupal Not available
+     * @todo May need more work
+     */
     "dateFilter": {
-      // Things to support: Year ranges, next 2 weeks, new thing this week, whats new
-      "criteria": "range", // "range" / "all" / "upcoming" / "from_current" / "past"
+      /**
+       * Field: Criteria
+       * Options: "today", "this_week", "this_month", "this_year", "today_and_future", "past", "range"
+       * @drupal [Field] Select a single option
+       * @drupal-src hard coded in option field
+       */
+      "criteria": "range",
+      /**
+       * Field: Start Date
+       * Name of field from which to test the date range start
+       * @drupal [Field] Select a single option
+       * @drupal-src search api fields
+       */
       "startDateField": "field_profile_womens_inducted_date",
+      /**
+       * Field: End Date
+       * Name of field from which to test the date range end
+       * @drupal [Field] Select a single option
+       * @drupal-src search api fields
+       */
       "endDateField": "field_profile_womens_inducted_date",
+      /**
+       * Field: Range Start
+       * Start of the range test - only shows if critera = "range"
+       * @drupal [Field] Date
+       */
       "dateRangeStart": "2021-01-01T11:28:23+10:00",
+      /**
+       * Field: Range End
+       * End of the range test - only shows if critera = "range"
+       * @drupal [Field] Date
+       */
       "dateRangeEnd": "2022-01-01T11:28:23+10:00"
     },
-    // Sort - will be overridden by the first option in `interface.display.sort` if available.
-    "sort": { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
-    // itemsToLoad - will be overridden by the first option in `interface.display.pagination` if available.
+    /**
+     * Sort
+     * If interface.display.sort is available with options, this will be ignored.
+     * @drupal [Field] Multiple field collections
+     */
+    "sort": [
+      /**
+       * Field: Sort item
+       * @drupal [Field] Title - search api field name
+       * @drupal [Field] Direction - hardcoded options "asc" or "desc"
+       */
+      { "field": "title", "direction": "asc" }
+    ],
+    /**
+     * Items to Load
+     * If interface.display.pagination is available with options, this will be ignored.
+     * @drupal [Field] Number
+     */
     "itemsToLoad": 10,
     /**
      * -------------------------------------------------------------------------
      * Complex - Pure Elasticsearch DSL Query
+     * POST to /search-api - Build functionality in search-api to accept POSTs.
+     * @drupal Not available
      * -------------------------------------------------------------------------
      */
-    // POST to /search-api - Build functionality in search-api to accept POSTs
     "custom": {
       "bool": {
         "must": {
@@ -71,10 +177,12 @@
     }
   },
   /**
+   * ---------------------------------------------------------------------------
    * "Interface" contains rules for displaying the results, and displaying
    * the exposed user form for changing the search query.
    * Where "type" is used, nuxt-tide will allow for defining custom
    * functions to extend the existing functionality.
+   * ---------------------------------------------------------------------------
    */
   "interface": {
     // Keyword filter
