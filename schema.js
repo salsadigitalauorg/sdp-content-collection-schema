@@ -7,6 +7,7 @@
  * @todo       - Need discussion.
  * @drupal     - Possible implementation for the Drupal Content Collection form.
  * @drupal_src - The data source to populate the form field.
+ * @nuxthook   - This object can be modified in tide.content-collection.js.
  * -----------------------------------------------------------------------------
  */
 const schema = {
@@ -139,8 +140,8 @@ const schema = {
     "sort": [
       /**
        * Field: Sort item
-       * @drupal [Field] Title - search api field name
-       * @drupal [Field] Direction - hardcoded options "asc" or "desc"
+       * @drupal [Field] Sort By - search api field name
+       * @drupal [Field] Sort Order - hardcoded options Ascending "asc" or Descending "desc"
        */
       { "field": "title", "direction": "asc" }
     ],
@@ -185,42 +186,222 @@ const schema = {
    * ---------------------------------------------------------------------------
    */
   "interface": {
-    // Keyword filter
+    /**
+     * Keyword filter
+     * User options for filtering by keywords.
+     */
     "keyword": {
-      // https://www.elastic.co/guide/en/elasticsearch/reference/7.8/query-dsl-simple-query-string-query.html
-      "type": "basic", // "basic" = use phrase match, "custom-xyz" = a custom implementation (e.g. legislation)
+      /**
+       * Type
+       * Allows for default "basic" functionality (phrase_match), or custom keyword configurations in FE code.
+       * @drupal Not available - defaults to "basic"
+       * @nuxthook Can accept other types
+       */
+      "type": "basic",
+      /**
+       * Label
+       * @drupal [Field] Single text
+       * @todo Should we expose to admins?
+       */
       "label": "Search by keyword",
+      /**
+       * Placeholder
+       * @drupal [Field] Single text
+       * @todo Should we expose to admins?
+       */
       "placeholder": "Enter keyword(s)",
+      /**
+       * Fields
+       * @drupal [Field] Select multiple option
+       * @drupal_src search api fields
+       * @todo Should we expose to admins?
+       */
       "fields": [ "title", "body", "summary_processed" ]
     },
-    // Advanced filters
+    /**
+     * Advanced search filters
+     * User options for aggregate filtering.
+     */
     "filters": {
-      "displayHidden": false, // show or hide advanced fields
+      /**
+       * Expand Search Filters (formally Display Hidden)
+       * Show or hide advanced search filter fields.
+       * If false, then a toggle button will display to show / hide fields.
+       * If true, then no toggle will be visible, and all field show by default.
+       * @drupal [Field] Single checkbox
+       */
+      "expandSearchFilters": false,
+      /**
+       * Submit on change
+       * If true, changing a filter will automatically update the search results
+       * without needing to trigger the submit button.
+       * If false, submit button will need to be pressed before search results update.
+       * In both cases, the submit button will still be visible and functional.
+       * @drupal [Field] Single checkbox
+       */
       "submitOnChange": false,
+      /**
+       * Toggle search fields label
+       * @drupal [Field] Single text
+       * @todo Should we expose to admins?
+       */
       "label": "Refine search",
+      /**
+       * Submit button
+       * The button that appears at the end of the advanced search filters.
+       */
       "submit": {
-        "visible": true,
+        /**
+         * Visibility
+         * Show or hide the submit button.
+         * Options: "visible", "hidden", "when-needed"
+         * @drupal [Field] Single option select
+         * @drupal_src hard-coded options
+         */
+        "visibility": "visible",
+        /**
+         * Label
+         * Visible label for the submit button
+         * @drupal [Field] Single text
+         */
         "label": "Apply change"
       },
       "clearForm": {
-        "visible": true, // or "on-dirty"
+        /**
+         * Visibility
+         * Show or hide the clear form button.
+         * Options: "visible", "hidden", "when-needed"
+         * @drupal [Field] Single option select
+         * @drupal_src hard-coded options
+         */
+        "visibility": "visible",
+        /**
+         * Label
+         * Visible label for the clear search button
+         * @drupal [Field] Single text
+         */
         "label": "Clear search filters"
       },
-      "defaultStyling": true, // Default: 1 field = 100%, 2 fields = 50%, 3 = 33.33% (desktop)
+      /**
+       * Default styling
+       * Automatic column arrangement of advanced search filters.
+       * E.g. Desktop 1 field = full width, 2 fields = 50% width, 3 fields = 33%
+       * Automatic arrangement can be disabled if a custom form has a special
+       * field layout requirement.
+       * @drupal Not available
+       */
+      "defaultStyling": true,
+      /**
+       * Fields
+       * The custom fields displayed within advanced search filters.
+       * @drupal Supports only a limited set of hard-coded fields
+       * @drupal_src Yet to be determined
+       * @todo What types of fields need to be supported?
+       */
       "fields": [
         {
-          "type": "custom-date" // Example custom implementation. Uses a custom hook to populate.
-        },
-        {
+          /**
+           * Type
+           * Default "basic". If a custom type, then a custom hook will receive
+           * this object to provide further processing.
+           * @drupal Not available
+           * @nuxthook Can accept other types
+           */
           "type": "basic",
-          "component": "rpl-select",
+          /**
+           * Options
+           * Vue Form Generator field options. This object will be passed
+           * directly into the form schema to create the form.
+           * https://vue-generators.gitbook.io/vue-generators/fields/field_properties
+           * JSON schema will not support functions (e.g. validators).
+           * For validators, or complex fields, a custom type should be used.
+           * @drupal There should be some preset options for filters that will populate this field.
+           * @todo How complex should this be for an admin?
+           */
           "options": {
-            // Ability to set vue-form-generator field settings directly.
-            // If select and no existing values are set, assume aggregation
+            /**
+             * VFG: Model
+             * This will be used in the URL query string.
+             * If not set, it will be set to the value in "elasticsearch-field".
+             * @drupal Not available
+             */
+            "model": "field_year",
+            /**
+             * VFG: Type
+             * Type of form field to use.
+             * @drupal Not available - default to "rplselect"
+             */
+            "type": "rplselect",
+            /**
+             * VFG: Required
+             * Set field to required - this is unlikely to be used for content collection.
+             * @drupal Not available - default to "false"
+             */
+            "required": true,
+            /**
+             * VFG: Validator
+             * Provide a specific validator for the field - this is unlikely to be used for content collection.
+             * @drupal Not available - default to "null"
+             */
+            "validator": ["required"],
+            /**
+             * VFG: Label
+             * The label of the field
+             * @drupal Single text field
+             */
+            "label": "Field label",
+            /**
+             * VFG: Hint
+             * The Hint text below the field
+             * @drupal Not available
+             */
+            "hint": "Field hint text",
+            /**
+             * VFG: Placholder
+             * The placholder text to display on the field
+             * @drupal Single text field
+             */
+            "placeholder": "Field placeholder",
+            /**
+             * VFG: Values
+             * The values of the field. For rplselect, if this is defined,
+             * then "elasticsearch-aggregation" should = false, as the values
+             * will come from the results.
+             * @drupal Multiple values with key (name) value (id)
+             * @drupal_src Either a taxonomy or user defined
+             * @todo Do we want to allow admins to set static values?
+             */
+            "values": [ { id: "topic_a", name: "Topic A" } ]
           },
+          /**
+           * Additional Classes
+           * Classes to add to the form field for styling.
+           * @drupal Not available
+           */
           "additionalClasses": [ "rpl-col-2" ],
+          /**
+           * ES Field
+           * The ES Field on which to test the form values against.
+           * @drupal [Field] Select a single option
+           * @drupal_src search api fields
+           */
           "elasticsearch-field": "field_year",
+          /**
+           * ES Aggregation
+           * Enable aggregation for a field.
+           * If true, form field values will change to the es field's aggregated results.
+           * If false, form field will not change it's values.
+           * @drupal [Field] Checkbox
+           */
           "elasticsearch-aggregation": true, // this will populate the component options
+        },
+        /**
+         * Example of a custom type that will use a hook to populate.
+         * @drupal Not available
+         * @nuxthook
+         */
+        {
+          "type": "custom-date"
         }
       ]
     },
