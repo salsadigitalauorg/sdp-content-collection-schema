@@ -531,7 +531,7 @@ const schema = {
          * The style of the card to display.
          * @drupal [Field] Single option - "no-image", "thumbnail", "profile"
          */
-        "style" "thumbnail"
+        "style": "thumbnail"
       }
     }
   }
