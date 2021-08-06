@@ -6,7 +6,7 @@
  * Tags:
  * @todo       - Need discussion.
  * @drupal     - Possible implementation for the Drupal Content Collection form.
- * @drupal-src - The data source to populate the form field.
+ * @drupal_src - The data source to populate the form field.
  * -----------------------------------------------------------------------------
  */
 const schema = {
@@ -46,14 +46,14 @@ const schema = {
      * For displaying user defined content
      * @todo Do we use uuid or nids?
      * @drupal [Field] Multiple entity references
-     * @drupal-src Any nodes
+     * @drupal_src Any nodes
      */
     "contentIds": [],
     /**
      * Content Types
      * For displaying content by type
      * @drupal [Field] Single option select
-     * @drupal-src Available content types
+     * @drupal_src Available content types
      */
     "contentTypes": ["profile"],
     /**
@@ -101,21 +101,21 @@ const schema = {
        * Field: Criteria
        * Options: "today", "this_week", "this_month", "this_year", "today_and_future", "past", "range"
        * @drupal [Field] Select a single option
-       * @drupal-src hard coded in option field
+       * @drupal_src hard coded in option field
        */
       "criteria": "range",
       /**
        * Field: Start Date
        * Name of field from which to test the date range start
        * @drupal [Field] Select a single option
-       * @drupal-src search api fields
+       * @drupal_src search api fields
        */
       "startDateField": "field_profile_womens_inducted_date",
       /**
        * Field: End Date
        * Name of field from which to test the date range end
        * @drupal [Field] Select a single option
-       * @drupal-src search api fields
+       * @drupal_src search api fields
        */
       "endDateField": "field_profile_womens_inducted_date",
       /**
