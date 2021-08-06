@@ -294,7 +294,7 @@ const schema = {
       /**
        * Fields
        * The custom fields displayed within advanced search filters.
-       * @drupal Supports only a limited set of hard-coded fields
+       * @drupal [Field] Supports only a limited set of hard-coded fields
        * @drupal_src Yet to be determined
        * @todo What types of fields need to be supported?
        */
@@ -405,17 +405,68 @@ const schema = {
         }
       ]
     },
-    // Display of results
+    /**
+     * Display of results
+     * Options for how the results should display.
+     */
     "display": {
-      "type": "grid", // extensible -> allow for more
+      /**
+       * Type
+       * The type of listing style to use. Default is "grid".
+       * @drupal Not available - defaults to "grid"
+       * @nuxthook Can accept other types
+       */
+      "type": "grid",
+      /**
+       * Options
+       * The configuration options for the type of display.
+       */
       "options": {
-        // Options passed to the display component
+        /**
+         * Result count text
+         * Text to display above the results. This is read out to a screen reader when a search is performed.
+         * Supports 2 tokens:
+         * - {range} - The current range of results E.g. 1-12
+         * - {count} - The total count of results
+         * @drupal Single text defaults to "Displaying {range} of {count} results"
+         */
         "resultsCountText": "Displaying {range} of {count} results",
+        /**
+         * Loading text
+         * Text to display when search results are loading.
+         * @drupal Single text defaults to "Loading"
+         */
         "loadingText": "Loading",
+        /**
+         * No results text
+         * Text to display when no results were returned.
+         * @drupal Single text defaults to "Sorry! We couldn't find any matches"
+         */
         "noResultsText": "Sorry! We couldn't find any matches",
+        /**
+         * Error text
+         * Text to display when an error occurs.
+         * @drupal Single text defaults to "Search isn't working right now, please try again later."
+         */
         "errorText": "Search isn't working right now, please try again later.",
+        /**
+         * Sort
+         * The configuration options for the exposed user sort.
+         * @drupal Not available - defaults to "null"
+         * @nuxthook Can be extended
+         */
         "sort": {
-          "userExposedOptions": [
+          /**
+           * Type
+           * The type of sort widget to use. Default is "field".
+           * @nuxthook Can accept other types (e.g. "table")
+           */
+          "type": "field",
+          /**
+           * Values
+           * The exposed field values to display to a user. First value is used by default.
+           */
+          "values": [
             { "name": "Relevance", "value": null },
             { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
             { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
@@ -423,19 +474,64 @@ const schema = {
             { "name": "Oldest", "value": [ { "field": "field_date", "direction": "desc" } ] }
           ]
         },
-        "pagination": {
-          "type": "list", // Future examples: "load-more" / "infinite-scroll"
-          "userExposedOptions": [
+        /**
+         * Items to load
+         * The configuration options for the exposed items to load.
+         * @drupal Not available - defaults to "null"
+         * @nuxthook Can be extended
+         */
+        "itemsToLoad": {
+          /**
+           * Type
+           * The type of items to load widget to use. Default is "field".
+           * @nuxthook Can accept other types
+           */
+          "type": "field",
+          /**
+           * Values
+           * The exposed field values to display to a user. First value is used by default.
+           */
+          "values": [
             { "name": "10", "value": 10 },
             { "name": "20", "value": 20 },
             { "name": "50", "value": 50 },
             { "name": "All", "value": 9999 }
           ]
+        },
+        /**
+         * Pagination
+         * The configuration options for the exposed pagination.
+         * @nuxthook Can be extended
+         */
+        "pagination": {
+          /**
+           * Type
+           * The type of pagination widget to use. Default is "numbers".
+           * @drupal Not available - defaults to "numbers"
+           * @nuxthook Can accept other types (e.g. "load-more" / "infinite-scroll")
+           */
+          "type": "numbers"
         }
       },
+      /**
+       * Result component
+       * The configuration options for displaying the results.
+       * @nuxthook Can be extended
+       */
       "resultComponent": {
-        // Object passed to a custom "hook" to implement mapping.
-        "type": "basic-card"
+        /**
+         * Type
+         * The type of result component to use. Default is "basic-card".
+         * @drupal Not available - defaults to "basic-card"
+         * @nuxthook Can accept other types
+         */
+        "type": "card",
+        /**
+         * Style
+         * The style of the card to display.
+         * @drupal [Field] Single option - "no-image", "thumbnail", "profile"
+         */
+        "style" "thumbnail"
       }
     }
   }
