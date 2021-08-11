@@ -30,6 +30,12 @@ const schema = {
     "url": "/search"
   },
   /**
+   * Data Connection Type
+   * Default to 'elastic-search', but available here to allow for other endpoints.
+   * @drupal Not available
+   */
+  "dataConnectionType": "elastic-search",
+  /**
    * ---------------------------------------------------------------------------
    * "Internal" contains the rules for generating the search query.
    * These rules are set by default and, with the exception of
