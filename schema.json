@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "description": "Schema for the Content Collection",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title displayed above the component"
+    }
+  },
+  "additionalProperties": false
+}

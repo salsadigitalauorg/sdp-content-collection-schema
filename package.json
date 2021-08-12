@@ -1,0 +1,23 @@
+{
+  "name": "content-collection-schema",
+  "version": "1.0.0",
+  "description": "The in-progress schema for configuring an advanced listing component (the Content Collection) for [Ripple](https://github.com/dpc-sdp/ripple).",
+  "main": "schema.js",
+  "scripts": {
+    "validate": "node validate.js",
+    "example": "npm run validate examples/test-case.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salsadigitalauorg/sdp-content-collection-schema.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/salsadigitalauorg/sdp-content-collection-schema/issues"
+  },
+  "homepage": "https://github.com/salsadigitalauorg/sdp-content-collection-schema#readme",
+  "dependencies": {
+    "ajv": "^8.6.2"
+  }
+}
