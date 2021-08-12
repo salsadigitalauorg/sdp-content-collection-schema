@@ -6,5 +6,17 @@ The in-progress schema for configuring an advanced listing component (the Conten
 
 ## Validation
 
-- A [JSON Schema](https://json-schema.org/) version will be implemented.
-- https://github.com/ajv-validator/ajv will eventually be implemented to test the schema.
+- A [JSON Schema](https://json-schema.org/) version can be found in `./schema.json`.
+
+Validation against this schema can be tested by running the following:
+
+```bash
+npm install
+npm run validate "./path-to-your-json-schema.json"
+```
+
+Or to test an example case:
+
+``` bash
+npm run example
+```

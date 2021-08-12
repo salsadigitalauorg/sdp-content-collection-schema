@@ -1,5 +1,93 @@
-
 {
-  "foo": 1,
-  "bar": "abc"
+  "title": "Exmaple listing",
+  "description": "My example listing to test the schema.",
+  "callToAction": {
+    "text": "View All",
+    "url": "/example-link"
+  },
+  "dataConnectionType": "elastic-search",
+  "internal": {
+    "contentIds": [10, 20, 30, 40],
+    "contentTypes": ["landing_page"],
+    "contentFields": {
+      "field_topic": { "operator": "AND", "values": [10] }
+    },
+    "includeCurrentPage": false,
+    "excludeIds": [15],
+    "dateFilter": {
+      "criteria": "range",
+      "startDateField": "field_profile_womens_inducted_date",
+      "endDateField": "field_profile_womens_inducted_date",
+      "dateRangeStart": "2021-01-01T11:28:23+10:00",
+      "dateRangeEnd": "2022-01-01T11:28:23+10:00"
+    },
+    "sort": [
+      { "field": "title", "direction": "asc" }
+    ],
+    "itemsToLoad": 10
+  },
+  "interface": {
+    "keyword": {
+      "type": "basic",
+      "label": "Search by keyword",
+      "placeholder": "Enter keyword(s)",
+      "fields": [ "title", "body", "summary_processed" ]
+    },
+    "filters": {
+      "expandSearchFilters": false,
+      "submitOnChange": false,
+      "label": "Refine search",
+      "submit": {
+        "visibility": "visible",
+        "label": "Apply change"
+      },
+      "clearForm": {
+        "visibility": "visible",
+        "label": "Clear search filters"
+      },
+      "defaultStyling": true,
+      "fields": [
+        {
+          "type": "basic",
+          "options": {},
+          "additionalClasses": [ "rpl-col-2" ],
+          "elasticsearch-field": "field_year",
+          "elasticsearch-aggregation": true
+        },
+        {
+          "type": "custom-date"
+        }
+      ]
+    },
+    "display": {
+      "type": "grid",
+      "options": {
+        "resultsCountText": "Displaying {range} of {count} results",
+        "loadingText": "Loading",
+        "noResultsText": "Sorry! We couldn't find any matches",
+        "errorText": "Search isn't working right now, please try again later.",
+        "sort": {
+          "type": "field",
+          "values": [
+            { "name": "Relevance", "value": null },
+            { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] }
+          ]
+        },
+        "itemsToLoad": {
+          "type": "field",
+          "values": [
+            { "name": "None", "value": null },
+            { "name": "10", "value": 10 }
+          ]
+        },
+        "pagination": {
+          "type": "numbers"
+        }
+      },
+      "resultComponent": {
+        "type": "card",
+        "style": "thumbnail"
+      }
+    }
+  }
 }
