@@ -399,43 +399,7 @@ const schema = {
            * If false, form field will not change it's values.
            * @drupal [Field] Checkbox
            */
-          "elasticsearch-aggregation": true,
-          /**
-           * ES Aggregation Options
-           * ...
-           * @drupal Not available
-           * @todo These are to provide more options to control how the filter is used, but there may be a more unified approach?
-           */
-          "elasticsearch-aggregation-options": {
-            "order": { "_key": "desc" }
-          },
-          /**
-           * ES Term-level Query Type
-           * The type of query to make.
-           * https://www.elastic.co/guide/en/elasticsearch/reference/current/term-level-queries.html
-           * Defaults to "term".
-           * Option options: "exists", "fuzzy", "ids", "prefix", "range",
-           * "regexp", "term", "terms", "terms_set", "type", "wildcard"
-           * @drupal Not available
-           * @todo These are to provide more options to control how the filter is used, but there may be a more unified approach?
-           */
-          "elasticsearch-term-level-query-type": "term",
-          /**
-           * ES Term-level Query Options
-           * Additional options specific to the term-level query type.
-           * E.g. "boost", "fuzziness", "rewrite", etc.
-           * @drupal Not available
-           * @todo These are to provide more options to control how the filter is used, but there may be a more unified approach?
-           */
-          "elasticsearch-term-level-query-options": {},
-          /**
-           * ES Value Transform
-           * Change the value of the term before sending to ES.
-           * Options: "uppercase", "lowercase"
-           * @drupal Not available
-           * @todo These are to provide more options to control how the filter is used, but there may be a more unified approach?
-           */
-          "elasticsearch-value-transform": "lowercase"
+          "elasticsearch-aggregation": true
         },
         /**
          * Example of a custom type that will use a hook to populate.

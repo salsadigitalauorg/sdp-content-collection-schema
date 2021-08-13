@@ -251,37 +251,6 @@
                   "elasticsearch-aggregation": {
                     "type": "boolean",
                     "description": "Determine if field should be added to aggregation."
-                  },
-                  "elasticsearch-aggregation-options": {
-                    "type": "object"
-                  },
-                  "elasticsearch-term-level-query-type": {
-                    "type": "string",
-                    "description": "Term-level type to wrap the field and value in.",
-                    "enum": [
-                      "exists",
-                      "fuzzy",
-                      "ids",
-                      "prefix",
-                      "range",
-                      "regexp",
-                      "term",
-                      "terms",
-                      "terms_set",
-                      "type",
-                      "wildcard"
-                    ]
-                  },
-                  "elasticsearch-term-level-query-options": {
-                    "type": "object"
-                  },
-                  "elasticsearch-value-transform": {
-                    "type": "string",
-                    "description": "",
-                    "enum": [
-                      "uppercase",
-                      "lowercase"
-                    ]
                   }
                 },
                 "additionalProperties": false
