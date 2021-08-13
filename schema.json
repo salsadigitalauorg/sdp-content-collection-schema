@@ -130,7 +130,11 @@
                     "type": "string"
                   },
                   "direction": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "desc",
+                      "asc"
+                    ]
                   }
                 }
               }
