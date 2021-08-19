@@ -1,0 +1,68 @@
+{
+  "internal": {
+    "contentTypes": ["landing_page"],
+    "contentFields": {
+      "field_tag": { "operator": "AND", "values": [12] }
+    }
+  },
+  "interface": {
+    "filters": {
+      "expandSearchFilters": true,
+      "submitOnChange": true,
+      "submit": {
+        "visibility": "hidden"
+      },
+      "clearForm": {
+        "visibility": "hidden"
+      },
+      "fields": [
+        {
+          "type": "vh_azsearch",
+          "elasticsearch-field": "title_az",
+          "elasticsearch-aggregation": false
+        }
+      ]
+    },
+    "display": {
+      "type": "grid",
+      "options": {
+        "resultsCountText": "Showing {range} of {count} results",
+        "loadingText": "Loading",
+        "noResultsText": "Sorry! We couldn't find any matches",
+        "errorText": "Search isn't working right now, please try again later.",
+        "sort": {
+          "type": "field",
+          "values": [
+            { "name": "Title A-Z", "value": [ { "field": "title", "direction": "asc" } ] },
+            { "name": "Title Z-A", "value": [ { "field": "title", "direction": "desc" } ] },
+            { "name": "Newest", "value": [ { "field": "created", "direction": "asc" } ] },
+            { "name": "Oldest", "value": [ { "field": "created", "direction": "desc" } ] }
+          ]
+        },
+        "itemsToLoad": {
+          "type": "field",
+          "values": [
+            { "name": "10", "value": 10 },
+            { "name": "20", "value": 20 },
+            { "name": "30", "value": 30 },
+            { "name": "50", "value": 50 },
+            { "name": "All", "value": 9999 }
+          ]
+        },
+        "pagination": {
+          "type": "numbers"
+        }
+      },
+      "resultComponent": {
+        "type": "vh-search-result",
+        "options": {
+          "mapping": {
+            "title":  { "type": "text", "field": "title" },
+            "date":   { "type": "date", "field": "created", "format": "DD MMM YYYY" },
+            "summary": { "type": "text", "field": "field_landing_page_summary" }
+          }
+        }
+      }
+    }
+  }
+}

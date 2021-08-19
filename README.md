@@ -20,3 +20,9 @@ Or to test an example case:
 ``` bash
 npm run example
 ```
+
+Some example scripts:
+```bash
+npm run validate "examples/vh-convictions-register.json"
+npm run validate "examples/vh-aging-and-age-care.json"
+```
