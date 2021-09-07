@@ -528,7 +528,7 @@ const schema = {
         /**
          * Type
          * The type of result component to use. Default is "basic-card".
-         * @drupal Not available - defaults to "basic-card"
+         * @drupal Not available - defaults to "card"
          * @nuxthook Can accept other types
          */
         "type": "card",
