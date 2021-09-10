@@ -227,6 +227,15 @@ const schema = {
    */
   "interface": {
     /**
+     * Keep state
+     * Store the state of the user interactions in the URL.
+     * Allows for bookmarking or sharing individual searches or result pages.
+     * Only one Content Collection can use this per page.
+     * @unavailable
+     * @proposal
+     */
+    "keepState": false,
+    /**
      * Keyword filter
      * User options for filtering by keywords.
      */
