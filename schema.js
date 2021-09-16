@@ -589,7 +589,8 @@ const schema = {
       "resultComponent": {
         /**
          * Type
-         * The type of result component to use. Default is "basic-card".
+         * The type of result component to use. Default is "card".
+         * Supports options = "card" / "searh-result"
          * @drupal Not available - defaults to "card"
          * @nuxthook Can accept other types
          * @implemented
@@ -597,7 +598,7 @@ const schema = {
         "type": "card",
         /**
          * Style
-         * The style of the card to display.
+         * The style of the card to display. Only for "card" type.
          * @drupal [Field] Single option - "no-image", "thumbnail", "profile"
          * @implemented
          */
