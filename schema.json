@@ -27,7 +27,7 @@
     },
     "connection": {
       "type": "object",
-      "description": "User options for filtering by keywords.",
+      "description": "Configuration of the search endpoint.",
       "properties": {
         "type": {
           "type": "string",
@@ -43,9 +43,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "dataConnectionType": {
-      "type": "string"
     },
     "internal": {
       "type": "object",
