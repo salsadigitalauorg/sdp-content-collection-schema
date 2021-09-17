@@ -161,6 +161,10 @@
       "type": "object",
       "description": "User options for filtering by keywords.",
       "properties": {
+        "keepState": {
+          "type": "boolean",
+          "description": "Store the state of the user interactions in the URL. Only one Content Collection can use this per page."
+        },
         "keyword": {
           "type": "object",
           "properties": {

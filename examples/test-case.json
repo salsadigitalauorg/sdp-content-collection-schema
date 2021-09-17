@@ -27,6 +27,7 @@
     "itemsToLoad": 10
   },
   "interface": {
+    "keepState": true,
     "keyword": {
       "type": "basic",
       "label": "Search by keyword",

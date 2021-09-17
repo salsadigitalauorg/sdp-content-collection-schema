@@ -231,7 +231,7 @@ const schema = {
      * Store the state of the user interactions in the URL.
      * Allows for bookmarking or sharing individual searches or result pages.
      * Only one Content Collection can use this per page.
-     * @unavailable
+     * @implemented
      * @proposal
      */
     "keepState": false,
