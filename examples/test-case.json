@@ -5,7 +5,11 @@
     "text": "View All",
     "url": "/example-link"
   },
-  "dataConnectionType": "elastic-search",
+  "connection": {
+    "type": "elastic-search",
+    "index": "node",
+    "serverIndex": "elasticsearch_index_nonprod_node"
+  },
   "internal": {
     "contentIds": [10, 20, 30, 40],
     "contentTypes": ["landing_page"],

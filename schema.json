@@ -25,6 +25,25 @@
       },
       "additionalProperties": false
     },
+    "connection": {
+      "type": "object",
+      "description": "User options for filtering by keywords.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of search endpoint to query. Defaults to elastic-search."
+        },
+        "index": {
+          "type": "string",
+          "description": "Used by Tide to store the machine name of the index to query."
+        },
+        "serverIndex": {
+          "type": "string",
+          "description": "Used by Nuxt-tide Search API to query a particular index."
+        }
+      },
+      "additionalProperties": false
+    },
     "dataConnectionType": {
       "type": "string"
     },
