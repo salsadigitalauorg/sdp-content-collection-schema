@@ -271,6 +271,14 @@
                   "elasticsearch-aggregation": {
                     "type": "boolean",
                     "description": "Determine if field should be added to aggregation."
+                  },
+                  "elasticsearch-aggregation-order": {
+                    "type": "string",
+                    "description": "The order (asc / desc) for aggregation results."
+                  },
+                  "elasticsearch-aggregation-size": {
+                    "type": "number",
+                    "description": "The number of aggregated results to return."
                   }
                 },
                 "additionalProperties": false

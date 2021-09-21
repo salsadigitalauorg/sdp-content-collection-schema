@@ -57,7 +57,9 @@
           "options": {},
           "additionalClasses": [ "rpl-col-2" ],
           "elasticsearch-field": "field_year",
-          "elasticsearch-aggregation": true
+          "elasticsearch-aggregation": true,
+          "elasticsearch-aggregation-order": "desc",
+          "elasticsearch-aggregation-size": 2
         },
         {
           "type": "custom-date"

@@ -447,7 +447,21 @@ const schema = {
            * @drupal [Field] Checkbox
            * @implemented
            */
-          "elasticsearch-aggregation": true
+          "elasticsearch-aggregation": true,
+          /**
+           * ES Aggregation Order
+           * Set the order ("asc" / "desc") for aggregation results. Defaults to "asc".
+           * @drupal Not available
+           * @implemented
+           */
+          "elasticsearch-aggregation-order": "asc",
+          /**
+           * ES Aggregation Size
+           * Set the number of aggregated results to return. Defaults to 30.
+           * @drupal Not available
+           * @implemented
+           */
+          "elasticsearch-aggregation-size": 30
         },
         /**
          * Example of a custom type that will use a hook to populate.
