@@ -54,7 +54,9 @@
       "fields": [
         {
           "type": "basic",
-          "options": {},
+          "options": {
+            "model": "field_year"
+          },
           "additionalClasses": [ "rpl-col-2" ],
           "elasticsearch-field": "field_year",
           "elasticsearch-aggregation": true,

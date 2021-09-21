@@ -381,8 +381,8 @@ const schema = {
           "options": {
             /**
              * VFG: Model
-             * This will be used in the URL query string.
-             * If not set, it will be set to the value in "elasticsearch-field".
+             * This will be used in the URL query string and as a fallback
+             * if "elasticsearch-field" is undefined.
              * @drupal Not available
              */
             "model": "field_year",
@@ -429,14 +429,11 @@ const schema = {
           "additionalClasses": [ "rpl-col-2" ],
           /**
            * ES Field
-           * The ES Field on which to test the form values against.
+           * The ES Field on which to query elasticsearch against.
+           * If not set, it will assume the options.model value is the ES field.
            * @drupal [Field] Select a single option
            * @drupal_src search api fields
-           * @unavailable
-           * @proposal Currently the field.options.model name is used for
-           *           querying elasticsearch. Is there still a use case for
-           *           having a different es fieldname than the model name?
-           *           Can this be removed and we just use the model name?
+           * @implemented
            */
           "elasticsearch-field": "field_year",
           /**

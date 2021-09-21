@@ -257,7 +257,14 @@
                     "type": "string"
                   },
                   "options": {
-                    "type": "object"
+                    "type": "object",
+                    "properties": {
+                      "model": {
+                        "type": "string",
+                        "description": "The URL query key for this field, and a fallback if elasticsearch-field is undefined."
+                      }
+                    },
+                    "required": ["model"]
                   },
                   "additionalClasses": {
                     "type": "array",
