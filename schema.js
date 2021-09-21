@@ -453,6 +453,7 @@ const schema = {
            * Set the order ("asc" / "desc") for aggregation results. Defaults to "asc".
            * @drupal Not available
            * @implemented
+           * @proposal
            */
           "elasticsearch-aggregation-order": "asc",
           /**
@@ -460,6 +461,7 @@ const schema = {
            * Set the number of aggregated results to return. Defaults to 30.
            * @drupal Not available
            * @implemented
+           * @proposal
            */
           "elasticsearch-aggregation-size": 30
         },
